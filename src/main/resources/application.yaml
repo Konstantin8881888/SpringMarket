@@ -21,3 +21,7 @@ spring:
       settings:
 #        trace: true
         web-allow-others: false
+
+  jwt:
+    secret: fg4564hgdhK4564GHHGfgd54lljHJKda456s4
+    lifetime: 36000000

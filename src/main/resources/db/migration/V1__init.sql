@@ -12,7 +12,7 @@ create table roles
 (
 id bigserial primary key,
 name varchar(50) not null,
-password varchar(80) not null
+password varchar(80)
 );
 
 create table users_roles
