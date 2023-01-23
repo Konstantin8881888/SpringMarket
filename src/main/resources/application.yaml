@@ -3,6 +3,10 @@ server:
   servlet:
     context-path: /winter
 
+jwt:
+  secret: fg4564hgdhK4564GHHGfgd54lljHJKda456s4
+  lifetime: 36000000
+
 spring:
   datasource:
     driver-class-name: org.h2.Driver
@@ -21,3 +25,5 @@ spring:
       settings:
 #        trace: true
         web-allow-others: false
+
+
