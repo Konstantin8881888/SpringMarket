@@ -1,9 +1,11 @@
 package com.example.SpringMarket.controllers;
 
+import com.example.SpringMarket.converters.ProductConverter;
 import com.example.SpringMarket.dtos.ProductDto;
 import com.example.SpringMarket.entities.Product;
 import com.example.SpringMarket.exceptions.AppError;
 import com.example.SpringMarket.exceptions.ResourceNotFoundException;
+import com.example.SpringMarket.services.CategoryService;
 import com.example.SpringMarket.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,11 +21,12 @@ import java.util.stream.Collectors;
 public class ProductController
 {
     private final ProductService productService;
+    private final ProductConverter productConverter;
 
     @GetMapping
     public List<ProductDto> findAllProducts()
     {
-        return productService.findAll().stream().map(p -> new ProductDto(p.getId(), p.getTitle(), p.getPrice())).collect(Collectors.toList());
+        return productService.findAll().stream().map(productConverter::entityToDto).collect(Collectors.toList());
     }
 
 //    @GetMapping("/{id}")
@@ -42,7 +45,14 @@ public class ProductController
     public ProductDto findProductById(@PathVariable Long id)
     {
         Product p = productService.findById(id).orElseThrow(()-> new  ResourceNotFoundException("Продукт не найден! Id: " + id));
-        return new ProductDto(p.getId(), p.getTitle(), p.getPrice());
+        return productConverter.entityToDto(p);
+    }
+
+    @PostMapping
+    public ProductDto createNewProduct(@RequestBody ProductDto productDto)
+    {
+        Product p = productService.createNewProduct(productDto);
+        return productConverter.entityToDto(p);
     }
 
 //    @ExceptionHandler
