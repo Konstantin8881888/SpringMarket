@@ -1,5 +1,6 @@
 package com.example.SpringMarket.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,27 +8,35 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Entity
+@Table(name = "orders")
 @Data
-@Table(name = "products")
 @NoArgsConstructor
-public class Product
-{
+@AllArgsConstructor
+public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title")
-    private String title;
-
-    @Column(name = "price")
-    private int price;
-
     @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> items;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "total_price")
+    private int totalPrice;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -37,3 +46,4 @@ public class Product
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }
+
