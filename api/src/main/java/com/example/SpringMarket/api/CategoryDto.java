@@ -2,8 +2,7 @@ package com.example.SpringMarket.api;
 
 import java.util.List;
 
-public class CategoryDto
-{
+public class CategoryDto {
     private Long id;
     private String title;
     private List<ProductDto> products;

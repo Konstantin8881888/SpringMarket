@@ -1,8 +1,6 @@
 package com.example.SpringMarket.api;
 
-
-public class JwtRequest
-{
+public class JwtRequest {
     private String username;
     private String password;
 

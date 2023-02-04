@@ -1,9 +1,9 @@
 package com.example.SpringMarket.core.converters;
 
-import com.example.SpringMarket.core.dtos.CategoryDto;
 import com.example.SpringMarket.core.entities.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import com.example.SpringMarket.api.CategoryDto;
 
 import java.util.stream.Collectors;
 
@@ -20,4 +20,3 @@ public class CategoryConverter {
         return c;
     }
 }
-

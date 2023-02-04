@@ -1,11 +1,11 @@
 package com.example.SpringMarket.carts;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-public class SpringMarketCartsApplication
-{
+@SpringBootApplication
+public class SpringMarketCartsApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringMarketCartsApplication.class, args);
     }
-
 }

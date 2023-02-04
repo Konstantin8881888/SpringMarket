@@ -1,11 +1,10 @@
 package com.example.SpringMarket.api;
 
-
-public class ProductDto
-{
+public class ProductDto {
     private Long id;
     private String title;
     private int price;
+    private String categoryTitle;
 
     public Long getId() {
         return id;
@@ -39,6 +38,13 @@ public class ProductDto
         this.categoryTitle = categoryTitle;
     }
 
-    private String categoryTitle;
-}
+    public ProductDto() {
+    }
 
+    public ProductDto(Long id, String title, int price, String categoryTitle) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
+        this.categoryTitle = categoryTitle;
+    }
+}
