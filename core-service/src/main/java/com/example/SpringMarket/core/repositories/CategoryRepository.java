@@ -1,11 +1,12 @@
 package com.example.SpringMarket.core.repositories;
 
-import com.example.SpringMarket.core.entities.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import com.example.SpringMarket.core.entities.Category;
 
 import java.util.Optional;
 
-public interface CategoryRepository extends JpaRepository<Category, Long>
-{
+@Repository
+public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findByTitle(String title);
 }

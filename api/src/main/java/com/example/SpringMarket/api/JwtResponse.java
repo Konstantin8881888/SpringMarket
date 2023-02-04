@@ -1,7 +1,6 @@
 package com.example.SpringMarket.api;
 
-public class JwtResponse
-{
+public class JwtResponse {
     private String token;
 
     public String getToken() {
@@ -10,5 +9,12 @@ public class JwtResponse
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public JwtResponse(String token) {
+        this.token = token;
+    }
+
+    public JwtResponse() {
     }
 }

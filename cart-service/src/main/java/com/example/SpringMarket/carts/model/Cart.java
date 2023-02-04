@@ -1,34 +1,28 @@
 package com.example.SpringMarket.carts.model;
 
-import com.example.SpringMarket.core.entities.Product;
 import lombok.Data;
+import com.example.SpringMarket.api.ProductDto;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Data
-public class Cart
-{
+public class Cart {
     private List<CartItem> items;
     private int totalPrice;
 
-    public Cart()
-    {
+    public Cart() {
         this.items = new ArrayList<>();
     }
 
-    public List<CartItem> getItems()
-    {
+    public List<CartItem> getItems() {
         return Collections.unmodifiableList(items);
     }
 
-    public void add(Product product)
-    {
-        for (CartItem item: items)
-        {
-            if (product.getId().equals(item.getProductId()))
-            {
+    public void add(ProductDto product) {
+        for (CartItem item : items) {
+            if (product.getId().equals(item.getProductId())) {
                 item.changeQuantity(1);
                 recalculate();
                 return;
@@ -38,25 +32,20 @@ public class Cart
         recalculate();
     }
 
-    public void clear()
-    {
-        items.clear();
-        totalPrice = 0;
-    }
-
-    public void remove(Long productId)
-    {
-        if(items.removeIf(item -> item.getProductId().equals(productId)))
-        {
+    public void remove(Long productId) {
+        if (items.removeIf(item -> item.getProductId().equals(productId))) {
             recalculate();
         }
     }
 
-    private void recalculate()
-    {
+    public void clear() {
+        items.clear();
         totalPrice = 0;
-        for (CartItem item: items)
-        {
+    }
+
+    private void recalculate() {
+        totalPrice = 0;
+        for (CartItem item : items) {
             totalPrice += item.getPrice();
         }
     }

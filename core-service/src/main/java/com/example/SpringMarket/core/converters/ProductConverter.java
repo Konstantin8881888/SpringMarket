@@ -1,13 +1,12 @@
 package com.example.SpringMarket.core.converters;
 
-import com.example.SpringMarket.core.exceptions.ResourceNotFoundException;
-import com.example.SpringMarket.core.dtos.ProductDto;
-import com.example.SpringMarket.core.entities.Category;
-import com.example.SpringMarket.core.entities.Product;
 import com.example.SpringMarket.core.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
+import com.example.SpringMarket.api.ProductDto;
+import com.example.SpringMarket.api.ResourceNotFoundException;
+import com.example.SpringMarket.core.entities.Category;
+import com.example.SpringMarket.core.entities.Product;
 
 @Component
 @RequiredArgsConstructor

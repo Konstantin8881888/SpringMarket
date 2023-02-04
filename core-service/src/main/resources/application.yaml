@@ -1,29 +1,26 @@
 server:
   port: 8189
   servlet:
-    context-path: /winter
-
-jwt:
-  secret: fg4564hgdhK4564GHHGfgd54lljHJKda456s4
-  lifetime: 36000000
-
+    context-path: /winter-market-core
 spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:mydatabase;MODE=PostgreSQL
-    username: admin
+    username: sa
     password:
   jpa:
     show-sql: true
-    propertyes:
+    properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
   h2:
     console:
       enabled: true
-#      path: /winter/h2-console
       settings:
-#        trace: true
         web-allow-others: false
-
-
+integrations:
+  cart-service:
+    url: http://localhost:8190/winter-market-carts/
+    connect-timeout: 5000
+    read-timeout: 10000
+    write-timeout: 5000

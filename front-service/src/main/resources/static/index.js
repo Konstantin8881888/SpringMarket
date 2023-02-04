@@ -2,7 +2,7 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
 {
     $scope.tryToAuth = function ()
     {
-        $http.post('http://localhost:8189/winter/auth', $scope.user)
+        $http.post('http://localhost:5555/auth/auth', $scope.user)
             .then(function successCallback(response)
             {
                 if (response.data.token)
@@ -41,14 +41,6 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         }
     };
 
-    $scope.authCheck = function ()
-    {
-        $http.get('http://localhost:8189/winter/auth_check').then(function (response)
-        {
-            alert(response.data.value);
-        });
-    };
-
     if ($localStorage.winterMarketUser)
     {
         try
@@ -70,7 +62,7 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
 
     $scope.loadProducts = function ()
     {
-        $http.get("http://localhost:8189/winter/api/v1/products").then(function (response)
+        $http.get("http://localhost:5555/core/api/v1/products").then(function (response)
         {
             let products = response.data;
             console.log(products);
@@ -80,37 +72,46 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         });
     }
 
-    $scope.loadProducts();
+    // $scope.loadProducts();
 
 
     $scope.showProductInfo = function (productId)
     {
-        $http.get("http://localhost:8189/winter/api/v1/products/" + productId).then(function (response)
+        $http.get("http://localhost:5555/core/api/v1/products/" + productId).then(function (response)
         {
             alert(response.data.title);
         });
     }
 
-    $scope.deleteProductById = function (productId)
-    {
-        $http.delete("http://localhost:8189/winter/api/v1/products/" + productId).then(function (response)
-        {
-            alert("Delete!");
-            $scope.loadProducts();
-        });
-    }
+    // $scope.deleteProductById = function (productId)
+    // {
+    //     $http.delete("http://localhost:5555/core/api/v1/products/" + productId).then(function (response)
+    //     {
+    //         alert("Delete!");
+    //         $scope.loadProducts();
+    //     });
+    // }
 
     $scope.loadCart = function ()
     {
-        $http.get("http://localhost:8189/winter/api/v1/cart").then(function (response)
+        $http.get("http://localhost:5555/cart/api/v1/cart").then(function (response)
         {
             $scope.cart = response.data;
         });
     }
 
+    $scope.createOrder = function ()
+    {
+        $http.post("http://localhost:5555/core/api/v1/orders").then(function (response)
+        {
+            alert("Order created!");
+            $scope.loadCart();
+        });
+    }
+
     $scope.addToCart = function (productId)
     {
-        $http.get("http://localhost:8189/winter/api/v1/cart/add/" + productId).then(function (response)
+        $http.get("http://localhost:5555/cart/api/v1/cart/add/" + productId).then(function (response)
         {
             alert("Продукт добавлен в корзину.");
             $scope.loadCart();
@@ -119,7 +120,7 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
 
     $scope.removeFromCart = function (productId)
     {
-        $http.get("http://localhost:8189/winter/api/v1/cart/remove/" + productId).then(function (response)
+        $http.get("http://localhost:5555/cart/api/v1/cart/remove/" + productId).then(function (response)
         {
             alert("Продукт удалён из корзины.");
             $scope.loadCart();
@@ -128,7 +129,7 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
 
     $scope.clearCart = function ()
     {
-        $http.get("http://localhost:8189/winter/api/v1/cart/clear").then(function (response)
+        $http.get("http://localhost:5555/cart/api/v1/cart/clear").then(function (response)
         {
             alert("Корзина очищена.");
             $scope.loadCart();

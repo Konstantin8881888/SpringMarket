@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Entity
 @Data
 @Table(name = "categories")
@@ -32,4 +33,3 @@ public class Category {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }
-

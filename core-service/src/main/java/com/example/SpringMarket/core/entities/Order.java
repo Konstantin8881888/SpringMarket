@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 @Entity
 @Table(name = "orders")
 @Data
@@ -22,11 +21,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "username")
+    private String username;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
     private List<OrderItem> items;
 
     @Column(name = "address")
@@ -46,4 +44,3 @@ public class Order {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }
-
