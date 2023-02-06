@@ -1,6 +1,10 @@
 package com.example.SpringMarket.core.services;
 
+import com.example.SpringMarket.core.repositories.specifications.ProductsSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.example.SpringMarket.api.ProductDto;
 import com.example.SpringMarket.api.ResourceNotFoundException;
@@ -17,8 +21,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public Page<Product> findAll(Specification<Product> spec, int page) {
+        return productRepository.findAll(spec, PageRequest.of(page, 5));
     }
 
     public Optional<Product> findById(Long id) {
@@ -37,5 +41,23 @@ public class ProductService {
         product.setCategory(category);
         productRepository.save(product);
         return product;
+    }
+
+    public Specification<Product> createSpecByFilters(Integer minPrice, Integer maxPrice, String title)
+    {
+        Specification<Product> spec = Specification.where(null);
+        if (minPrice != null)
+        {
+            spec = spec.and(ProductsSpecifications.priceGreaterOrEqualsThan(minPrice));
+        }
+        if (maxPrice != null)
+        {
+            spec = spec.and(ProductsSpecifications.priceLessThanOrEqualsThan(maxPrice));
+        }
+        if (title != null)
+        {
+            spec = spec.and(ProductsSpecifications.titleLike(title));
+        }
+        return spec;
     }
 }
