@@ -3,19 +3,19 @@ angular.module('market').controller('cartController', function ($scope, $http, $
     const coreContextPath = 'http://localhost:5555/core/';
 
     $scope.loadCart = function () {
-        $http.get(contextPath + 'api/v1/cart').then(function (response) {
+        $http.get(contextPath + 'api/v1/cart/' + $localStorage.winterMarketGuestCartId).then(function (response) {
             $scope.cart = response.data;
         });
     }
 
     $scope.clearCart = function () {
-        $http.get(contextPath + 'api/v1/cart/clear').then(function (response) {
+        $http.get(contextPath + 'api/v1/cart/' + $localStorage.winterMarketGuestCartId + '/clear').then(function (response) {
             $scope.loadCart();
         });
     }
 
     $scope.removeFromCart = function (productId) {
-        $http.get(contextPath + 'api/v1/cart/remove/' + productId).then(function (response) {
+        $http.get(contextPath + 'api/v1/cart/' + $localStorage.winterMarketGuestCartId + '/remove/' + productId).then(function (response) {
             $scope.loadCart();
         });
     }

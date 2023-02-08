@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,14 +40,14 @@ public class OrderServiceTest
         CartDto cartDto = new CartDto();
         CartItemDto cartItemDto = new CartItemDto();
         cartItemDto.setProductTitle("Juice");
-        cartItemDto.setPricePerProduct(120);
+        cartItemDto.setPricePerProduct(BigDecimal.valueOf(120));
         cartItemDto.setQuantity(2);
-        cartItemDto.setPrice(240);
+        cartItemDto.setPrice(BigDecimal.valueOf(240));
         cartItemDto.setProductId(2244L);
-        cartDto.setTotalPrice(240);
+        cartDto.setTotalPrice(BigDecimal.valueOf(240));
         cartDto.setItems(List.of(cartItemDto));
 
-        Mockito.doReturn(cartDto).when(cartServiceIntegration).getCurrentCart();
+        Mockito.doReturn(cartDto).when(cartServiceIntegration).getCurrentCart(null);
 
         Category category = new Category();
         category.setId(1L);
@@ -54,7 +55,7 @@ public class OrderServiceTest
 
         Product product = new Product();
         product.setId(2244L);
-        product.setPrice(120);
+        product.setPrice(BigDecimal.valueOf(120));
         product.setTitle("Juice");
         product.setCategory(category);
 

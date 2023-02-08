@@ -2,6 +2,7 @@ package com.example.SpringMarket.core.services;
 
 import com.example.SpringMarket.core.integrations.CartServiceIntegration;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.SpringMarket.api.CartDto;
@@ -9,9 +10,10 @@ import com.example.SpringMarket.core.entities.Order;
 import com.example.SpringMarket.core.entities.OrderItem;
 import com.example.SpringMarket.core.repositories.OrderRepository;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class OrderService {
     private final ProductService productService;
@@ -20,7 +22,7 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(String username) {
-        CartDto cartDto = cartServiceIntegration.getCurrentCart();
+        CartDto cartDto = cartServiceIntegration.getCurrentCart(username);
         Order order = new Order();
         order.setUsername(username);
         order.setTotalPrice(cartDto.getTotalPrice());
@@ -34,7 +36,11 @@ public class OrderService {
                 )
         ).collect(Collectors.toList()));
         orderRepository.save(order);
-        cartServiceIntegration.clear();
+        cartServiceIntegration.clear(username);
         return order;
+    }
+
+    public List<Order> findByUsername(String username) {
+        return orderRepository.findByUsername(username);
     }
 }
