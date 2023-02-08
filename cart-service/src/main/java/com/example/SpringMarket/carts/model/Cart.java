@@ -3,6 +3,7 @@ package com.example.SpringMarket.carts.model;
 import lombok.Data;
 import com.example.SpringMarket.api.ProductDto;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,14 +11,10 @@ import java.util.List;
 @Data
 public class Cart {
     private List<CartItem> items;
-    private int totalPrice;
+    private BigDecimal totalPrice;
 
     public Cart() {
         this.items = new ArrayList<>();
-    }
-
-    public List<CartItem> getItems() {
-        return Collections.unmodifiableList(items);
     }
 
     public void add(ProductDto product) {
@@ -40,13 +37,15 @@ public class Cart {
 
     public void clear() {
         items.clear();
-        totalPrice = 0;
+        totalPrice = BigDecimal.ZERO;
     }
 
-    private void recalculate() {
-        totalPrice = 0;
-        for (CartItem item : items) {
-            totalPrice += item.getPrice();
+    private void recalculate()
+    {
+        totalPrice = BigDecimal.ZERO;
+        for (CartItem item : items)
+        {
+            totalPrice = totalPrice.add(item.getPrice());
         }
     }
 }

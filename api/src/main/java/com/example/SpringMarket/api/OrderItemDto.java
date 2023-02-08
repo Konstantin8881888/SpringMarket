@@ -2,19 +2,20 @@ package com.example.SpringMarket.api;
 
 import java.math.BigDecimal;
 
-public class CartItemDto {
-    private Long productId;
+public class OrderItemDto {
+    private Long id;
     private String productTitle;
+    private Long orderId;
     private int quantity;
     private BigDecimal pricePerProduct;
     private BigDecimal price;
 
-    public Long getProductId() {
-        return productId;
+    public Long getId() {
+        return id;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getProductTitle() {
@@ -23,6 +24,14 @@ public class CartItemDto {
 
     public void setProductTitle(String productTitle) {
         this.productTitle = productTitle;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public int getQuantity() {
