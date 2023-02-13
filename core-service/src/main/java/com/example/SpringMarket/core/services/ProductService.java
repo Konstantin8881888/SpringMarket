@@ -1,6 +1,7 @@
 package com.example.SpringMarket.core.services;
 
 import com.example.SpringMarket.core.repositories.specifications.ProductsSpecifications;
+import com.example.SpringMarket.core.validators.ProductValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final ProductValidator productValidator;
 
     public Page<Product> findAll(Specification<Product> spec, int page) {
         return productRepository.findAll(spec, PageRequest.of(page, 5));
@@ -33,7 +35,9 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public Product createNewProduct(ProductDto productDto) {
+    public Product createNewProduct(ProductDto productDto)
+    {
+        productValidator.validate(productDto);
         Product product = new Product();
         product.setPrice(productDto.getPrice());
         product.setTitle(productDto.getTitle());
