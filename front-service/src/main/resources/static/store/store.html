@@ -11,7 +11,7 @@
             <td></td>
         </tr>
         <tbody>
-        <tr ng-repeat="p in productsList">
+        <tr ng-repeat="p in productsPage.items">
             <td>{{p.id}}</td>
             <td>{{p.title}}</td>
             <td>{{p.price}}</td>
@@ -22,4 +22,11 @@
         </tr>
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" ng-repeat="pageIndex in pagesList">
+                <button class="page-link" ng-click="loadProducts(pageIndex)">{{pageIndex}}</button>
+            </li>
+        </ul>
+    </nav>
 </div>

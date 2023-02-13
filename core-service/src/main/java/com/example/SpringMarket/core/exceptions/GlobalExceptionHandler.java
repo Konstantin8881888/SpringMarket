@@ -12,8 +12,16 @@ import com.example.SpringMarket.api.ResourceNotFoundException;
 @Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler
-    public ResponseEntity<AppError> catchResourceNotFoundException(ResourceNotFoundException e) {
+    public ResponseEntity<AppError> catchResourceNotFoundException(ResourceNotFoundException e)
+    {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ValidationError> catchResourceNotFoundException(ValidationException e)
+    {
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new ValidationError(e.getFields(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }
