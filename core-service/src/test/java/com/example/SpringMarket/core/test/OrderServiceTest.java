@@ -37,13 +37,14 @@ public class OrderServiceTest
     @Test
     public void createOrderTest()
     {
+        CartItemDto cartItemDto = CartItemDto.builder()
+                .productTitle("Juice")
+                .pricePerProduct(BigDecimal.valueOf(120))
+                .quantity(2)
+                .price(BigDecimal.valueOf(240))
+                .productId(2244L)
+                .build();
         CartDto cartDto = new CartDto();
-        CartItemDto cartItemDto = new CartItemDto();
-        cartItemDto.setProductTitle("Juice");
-        cartItemDto.setPricePerProduct(BigDecimal.valueOf(120));
-        cartItemDto.setQuantity(2);
-        cartItemDto.setPrice(BigDecimal.valueOf(240));
-        cartItemDto.setProductId(2244L);
         cartDto.setTotalPrice(BigDecimal.valueOf(240));
         cartDto.setItems(List.of(cartItemDto));
 
