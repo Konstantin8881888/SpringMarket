@@ -4,47 +4,45 @@ import lombok.Data;
 import com.example.SpringMarket.api.ProductDto;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 public class Cart {
-    private List<CartItem> items;
+    private Map<Long, CartItem> items;
     private BigDecimal totalPrice;
 
     public Cart() {
-        this.items = new ArrayList<>();
+        this.items = new HashMap<>();
+        this.totalPrice = BigDecimal.ZERO;
     }
 
     public void add(ProductDto product) {
-        for (CartItem item : items) {
-            if (product.getId().equals(item.getProductId())) {
-                item.changeQuantity(1);
-                recalculate();
-                return;
-            }
+        CartItem item = items.get(product.getId());
+        if (item != null) {
+            item.changeQuantity(1);
+        } else {
+            item = new CartItem(product.getId(), product.getTitle(), 1, product.getPrice(), product.getPrice());
+            items.put(product.getId(), item);
         }
-        items.add(new CartItem(product.getId(), product.getTitle(), 1, product.getPrice(), product.getPrice()));
         recalculate();
     }
 
     public void remove(Long productId) {
-        if (items.removeIf(item -> item.getProductId().equals(productId))) {
+        if (items.remove(productId) != null) {
             recalculate();
         }
     }
 
-    public void clear() {
+    public void clear()
+    {
         items.clear();
         totalPrice = BigDecimal.ZERO;
     }
 
-    private void recalculate()
-    {
+    private void recalculate() {
         totalPrice = BigDecimal.ZERO;
-        for (CartItem item : items)
-        {
+        for (CartItem item : items.values()) {
             totalPrice = totalPrice.add(item.getPrice());
         }
     }
