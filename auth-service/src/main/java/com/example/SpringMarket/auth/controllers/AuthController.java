@@ -22,30 +22,33 @@ import com.example.SpringMarket.auth.utils.JwtTokenUtil;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
+    private static final String PASSWORDS_DO_NOT_MATCH_ERROR = "Пароли не совпадают";
+    private static final String USER_ALREADY_EXISTS_ERROR = "Пользователь с таким именем уже существует";
+    private static final String INCORRECT_CREDENTIALS_ERROR = "Неверные учетные данные";
+    private static final int UNAUTHORIZED_STATUS_CODE = 401;
+    private static final int BAD_REQUEST_STATUS_CODE = 400;
     private final UserService userService;
     private final JwtTokenUtil jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/auth")
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody JwtRequest authRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Incorrect username or password"), HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AppError(UNAUTHORIZED_STATUS_CODE, INCORRECT_CREDENTIALS_ERROR));
         }
-        UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
-        String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(generateJwtToken(authRequest.getUsername()));
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> createAuthToken(@RequestBody RegistrationUserDto registrationUserDto) {
+    public ResponseEntity<?> registerUser(@RequestBody RegistrationUserDto registrationUserDto) {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getConfirmPassword())) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароли не совпадают"), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AppError(BAD_REQUEST_STATUS_CODE, PASSWORDS_DO_NOT_MATCH_ERROR));
         }
         if (userService.findByUsername(registrationUserDto.getUsername()).isPresent()) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем уже существует"), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AppError(BAD_REQUEST_STATUS_CODE, USER_ALREADY_EXISTS_ERROR));
         }
         User user = new User();
         user.setEmail(registrationUserDto.getEmail());
@@ -53,8 +56,12 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
         userService.createUser(user);
 
-        UserDetails userDetails = userService.loadUserByUsername(registrationUserDto.getUsername());
+        return ResponseEntity.ok(generateJwtToken(registrationUserDto.getUsername()));
+    }
+
+    private JwtResponse generateJwtToken(String username) {
+        UserDetails userDetails = userService.loadUserByUsername(username);
         String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+        return new JwtResponse(token);
     }
 }
