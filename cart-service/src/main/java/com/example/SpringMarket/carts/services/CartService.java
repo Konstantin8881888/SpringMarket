@@ -14,17 +14,13 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class CartService {
     private final ProductServiceIntegration productServiceIntegration;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisService redisService;
 
     @Value("${cart-service.cart-prefix}")
     private String cartPrefix;
 
     public Cart getCurrentCart(String uuid) {
-        String targetUuid = cartPrefix + uuid;
-        if (!redisTemplate.hasKey(targetUuid)) {
-            redisTemplate.opsForValue().set(targetUuid, new Cart());
-        }
-        return (Cart)redisTemplate.opsForValue().get(targetUuid);
+        return redisService.getCart(cartPrefix + uuid);
     }
 
     public void add(String uuid, Long productId) {
@@ -40,9 +36,10 @@ public class CartService {
         execute(uuid, Cart::clear);
     }
 
-    private void execute(String uuid, Consumer<Cart> operation) {
+    private void execute(String uuid, Consumer<Cart> operation)
+    {
         Cart cart = getCurrentCart(uuid);
         operation.accept(cart);
-        redisTemplate.opsForValue().set(cartPrefix + uuid, cart);
+        redisService.setCart(cartPrefix + uuid, cart);
     }
 }

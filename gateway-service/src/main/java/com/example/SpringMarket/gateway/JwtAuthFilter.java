@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Component
 public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Config> {
     @Autowired
@@ -49,7 +51,14 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
     }
 
     private String getAuthHeader(ServerHttpRequest request) {
-        return request.getHeaders().getOrEmpty("Authorization").get(0).substring(7);
+        List<String> authHeaders = request.getHeaders().getOrEmpty("Authorization");
+        if (!authHeaders.isEmpty()) {
+            String headerValue = authHeaders.get(0);
+            if (headerValue.startsWith("Bearer ")) {
+                return headerValue.substring(7);
+            }
+        }
+        return null;
     }
 
     private boolean isAuthMissing(ServerHttpRequest request) {
