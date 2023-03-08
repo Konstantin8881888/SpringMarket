@@ -4,7 +4,6 @@ import com.example.SpringMarket.api.AppError;
 import com.example.SpringMarket.core.converters.ProductConverter;
 import com.example.SpringMarket.core.entities.Product;
 import com.example.SpringMarket.core.services.ProductService;
-import com.example.SpringMarket.core.validators.ProductValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,8 +19,6 @@ import com.example.SpringMarket.api.ProductDto;
 import com.example.SpringMarket.api.PageDto;
 import com.example.SpringMarket.api.ResourceNotFoundException;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -47,10 +44,7 @@ public class ProductController {
             @RequestParam(required = false, name = "title") String title,
             @RequestParam(defaultValue = "1", name = "p") Integer page)
     {
-        if (page < 1)
-        {
-            page = 1;
-        }
+        page = Math.max(page, 1);
         Specification<Product> spec = productService.createSpecByFilters(minPrice, maxPrice, title);
         Page<ProductDto> jpaPage = productService.findAll(spec, page - 1).map(productConverter::entityToDto);
 
